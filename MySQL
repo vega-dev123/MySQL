@@ -1,30 +1,49 @@
-在使用源码包安装服务程序之前，首先要让安装主机具备编译程序源码的环境，他需要具备C语言、C++语言、Perl语言的编译器，以及各种常见的编译支持函数库程序。因此请先配置妥当Yum软件仓库，然后把下面列出的这些软件包都统统安装上：
-yum install -y apr* autoconf automake bison bzip2 bzip2* compat* cpp curl curl-devel fontconfig fontconfig-devel freetype freetype* freetype-devel gcc gcc-c++ gd gettext gettext-devel glibc kernel kernel-headers keyutils keyutils-libs-devel krb5-devel libcom_err-devel libpng libpng-devel libjpeg* libsepol-devel libselinux-devel libstdc++-devel libtool* libgomp libxml2 libxml2-devel libXpm* libtiff libtiff* make mpfr ncurses* ntp openssl openssl-devel patch pcre-devel perl php-common php-gd policycoreutils telnet t1lib t1lib* nasm nasm* wget zlib-devel
+1，下载源码包
+wget https://mirrors.cloud.tencent.com/mysql/downloads/MySQL-5.7/mysql-boost-5.7.32.tar.gz
+
+2,解压源码包，文件夹重命名
+cd /usr/local/src
+tar -xzvf mysql-boost-5.7.32.tar.gz -C /usr/local
+cd /usr/local
+mv mysql-5.7.32/ mysql
+chwon -R mysql:mysql mysql
+
+3，添加用户mysql
+useradd -s /sbin/nologin mysql
+
+4,建立所需目录并更改所有者为mysql
+mkdir -p /data/mysql/data
+chown -R mysql:mysql /data/mysql
+chwon -R mysql:mysql /usr/local/mysql
 
 
 
+8，解压Mysql压缩包
 
+9，编译安装
+#切换到源码目录下
+cd /usr/local/src/mysql-5.7.31
 
+#cmake
+cmake \
+-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+-DCMAKE_INSTALL_PREFIX=/usr/local/web/mysql \
+-DMYSQL_UNIX_ADDR=/usr/local/web/mysql/mysql.sock \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DMYSQL_DATADIR=/home/mysql/data \
+-DSYSCONFDIR=/etc/my.cnf \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_PARTITION_STORAGE_ENGINE=1 \
+-DENABLE_DEBUG_SYNC=0 \
+-DENABLED_LOCAL_INFILE=1 \
+-DENABLED_PROFILING=1 \
+-DMYSQL_TCP_PORT=3306 \
+-DWITH_DEBUG=0 \
+-DWITH_SSL=yes \
+-DDOWNLOAD_BOOST=1 \
+-DWITH_BOOST=boost
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+10,设置开机启动
 
