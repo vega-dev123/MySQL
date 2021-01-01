@@ -1,50 +1,64 @@
-1，下载源码包到/usr/local/src
+
+1，安装依赖包
+yum install -y cmake make gcc gcc-c++ wget ncurses-devel cmake make perl ncurses-devel openssl-devel bison-devel libaio libaio-devel
+
+2，下载源码包到/usr/local/src
 wget https://mirrors.cloud.tencent.com/mysql/downloads/MySQL-5.7/mysql-boost-5.7.32.tar.gz
 
-2,解压源码包，文件夹重命名
+3,解压源码包
 cd /usr/local/src
-tar -xzvf mysql-boost-5.7.32.tar.gz -C /usr/local
-cd /usr/local
-mv mysql-5.7.32/ mysql
+tar -xzvf mysql-boost-5.7.32.tar.gz
 
+4，创建mysql用户
+useradd mysql -s /sbin/nologin
 
-3，添加用户mysql
-useradd -s /sbin/nologin mysql
-chwon -R mysql:mysql mysql
+5，创建数据库程序和数据库文件的目录
+mkdir -p /usr/local/mysql/var
+chown -R mysql:mysql /usr/local/mysql
 
-4,建立所需目录并更改所有者为mysql
-mkdir -p /data/mysql/data
-chown -R mysql:mysql /data/mysql
-chwon -R mysql:mysql /usr/local/mysql
-
-
-
-8，解压Mysql压缩包
-
-9，编译安装
+6，编译安装
 #切换到源码目录下
 cd /usr/local/src/mysql-5.7.31
 
-#cmake
 cmake \
--DCMAKE_BUILD_TYPE=RelWithDebInfo \
--DCMAKE_INSTALL_PREFIX=/usr/local/web/mysql \
--DMYSQL_UNIX_ADDR=/usr/local/web/mysql/mysql.sock \
--DDEFAULT_CHARSET=utf8 \
--DDEFAULT_COLLATION=utf8_general_ci \
--DMYSQL_DATADIR=/home/mysql/data \
--DSYSCONFDIR=/etc/my.cnf \
--DWITH_MYISAM_STORAGE_ENGINE=1 \
--DWITH_INNOBASE_STORAGE_ENGINE=1 \
--DWITH_PARTITION_STORAGE_ENGINE=1 \
--DENABLE_DEBUG_SYNC=0 \
--DENABLED_LOCAL_INFILE=1 \
--DENABLED_PROFILING=1 \
--DMYSQL_TCP_PORT=3306 \
--DWITH_DEBUG=0 \
--DWITH_SSL=yes \
--DDOWNLOAD_BOOST=1 \
--DWITH_BOOST=boost
+-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+-DMYSQL_DATADIR=/usr/local/mysql/var \
+-DSYSCONFDIR=/etc \
+-DWITH_BOOST=/usr/local/src/mysql-5.7.32/boost
 
-10,设置开机启动
+#如果出现下面的提示就表示成功生成了编译环境：
+#-- Configuring done
+#-- Generating donem
+
+注：如果编译出现错误，请先删除CMakeCache.txt后，再重新编译
+rm -f CMakeCache.txt
+
+make
+make install
+
+#cmake参数解释如下：
+ 
+#DCMAKE_INSTALL_PREFIX=/usr/local/mysql:安装路径
+ 
+#MYSQL_DATADIR=/data/mysql:数据文件存放位置
+  
+#DSYSCONFDIR=/etc:my.cnf路径
+ 
+#DWITH_MYISAM_STORAGE_ENGINE=1:支持MyIASM引擎
+
+#DWITH_INNOBASE_STORAGE_ENGINE=1:支持InnoDB引擎
+
+#DMYSQL_UNIX_ADDR=/data/mysql/mysqld.sock:连接数据库socket路径
+
+#DENABLED_LOCAL_INFILE=1:允许从本地导入数据
+
+#DWITH_PARTITION_STORAGE_ENGINE=1:安装支持数据库分区
+
+#DEXTRA_CHARSETS=all:安装所有的字符集
+
+#DDEFAULT_CHARSET=utf8:默认字符
+
+#DWITH_EMBEDDED_SERVER=1:嵌入式服务器
+
+
 
