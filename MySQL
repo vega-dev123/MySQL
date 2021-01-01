@@ -1,4 +1,4 @@
-1，下载源码包
+1，下载源码包到/usr/local/src
 wget https://mirrors.cloud.tencent.com/mysql/downloads/MySQL-5.7/mysql-boost-5.7.32.tar.gz
 
 2,解压源码包，文件夹重命名
@@ -6,10 +6,11 @@ cd /usr/local/src
 tar -xzvf mysql-boost-5.7.32.tar.gz -C /usr/local
 cd /usr/local
 mv mysql-5.7.32/ mysql
-chwon -R mysql:mysql mysql
+
 
 3，添加用户mysql
 useradd -s /sbin/nologin mysql
+chwon -R mysql:mysql mysql
 
 4,建立所需目录并更改所有者为mysql
 mkdir -p /data/mysql/data
